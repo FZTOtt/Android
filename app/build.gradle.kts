@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.zizi"
+    namespace = "com.example.myjokes"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.zizi"
+        applicationId = "com.example.myjokes"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -32,6 +32,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
