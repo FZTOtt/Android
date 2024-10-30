@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myjokes.data.JokeGenerator
 import com.example.myjokes.databinding.ActivityJokesListBinding
 import com.example.myjokes.databinding.JokeItemBinding
@@ -29,6 +30,6 @@ class JokesListActivity : AppCompatActivity() {
 
     private fun createRecyclerViewList() {
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = GridLayoutManager(this, 1)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
     }
 }
