@@ -1,13 +1,18 @@
 package com.example.myjokes.data
 
-class JokeGenerator {
+object JokeGenerator {
+
+    val data = mutableListOf<Joke>()
+
     fun generateJokeData(): List<Joke> {
-        return buildList {
+        data.clear()
+        data.addAll(buildList {
             add(generateTestJoke(1))
             for (i in 2..7) {
                 add(generateRandomJoke(i))
             }
-        }
+        })
+        return data
     }
 
     private fun generateRandomJoke(index: Int): Joke {
