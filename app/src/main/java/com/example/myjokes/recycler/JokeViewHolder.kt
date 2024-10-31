@@ -1,0 +1,14 @@
+package com.example.myjokes.recycler
+
+import androidx.recyclerview.widget.RecyclerView
+import com.example.myjokes.data.Joke
+import com.example.myjokes.databinding.JokeItemBinding
+
+class JokeViewHolder(private val binding: JokeItemBinding): RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(joke: Joke){
+        binding.category.text = joke.category
+        binding.question.text = joke.question
+        binding.answer.text = joke.answer
+    }
+}

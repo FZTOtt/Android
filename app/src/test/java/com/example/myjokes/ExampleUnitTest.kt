@@ -1,4 +1,4 @@
-package com.example.zizi
+package com.example.myjokes
 
 import org.junit.Test
 
