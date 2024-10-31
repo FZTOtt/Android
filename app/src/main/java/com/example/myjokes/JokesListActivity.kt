@@ -1,22 +1,20 @@
 package com.example.myjokes
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myjokes.data.JokeGenerator
 import com.example.myjokes.databinding.ActivityJokesListBinding
-import com.example.myjokes.databinding.JokeItemBinding
-import com.example.myjokes.recycler.JokeAdapter
+import com.example.myjokes.recycler.adapter.JokeAdapter
+import com.example.myjokes.recycler.adapter.JokeListAdapter
+import com.example.myjokes.recycler.util.JokeItemCallback
 
 class JokesListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityJokesListBinding
 
-    private val adapter = JokeAdapter()
+    private val itemCallback = JokeItemCallback()
+    private val adapter = JokeListAdapter(itemCallback)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +23,7 @@ class JokesListActivity : AppCompatActivity() {
 
         createRecyclerViewList()
         val generator = JokeGenerator()
-        adapter.setNewData(generator.generateJokeData())
+        adapter.submitList(generator.generateJokeData())
     }
 
     private fun createRecyclerViewList() {
