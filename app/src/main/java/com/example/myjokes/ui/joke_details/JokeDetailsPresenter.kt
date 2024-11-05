@@ -5,13 +5,13 @@ import com.example.myjokes.data.JokeGenerator
 class JokeDetailsPresenter(private val view: JokeDetailsView) {
 
     fun loadJokeDetails(jokePosition: Int) {
-        if (jokePosition == -1) {
+        val joke = JokeGenerator.data.getOrNull(jokePosition)
+        if (joke == null) {
             view.showErrorAndCloseScreen("Шутка не найдена")
         } else {
             JokeGenerator.data[jokePosition].let {
                 view.showJokeInfo(it)
             }
         }
-
     }
 }

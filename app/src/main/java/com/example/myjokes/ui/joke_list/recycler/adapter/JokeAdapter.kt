@@ -1,9 +1,7 @@
 package com.example.myjokes.ui.joke_list.recycler.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myjokes.data.Joke
@@ -27,17 +25,13 @@ class JokeAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = JokeItemBinding.inflate(inflater)
-        return JokeViewHolder(binding).apply{
-            binding.root.setOnClickListener {
-                handlePersonClick(adapterPosition)
-            }
-        }
+        return JokeViewHolder(binding)
     }
 
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(data[position]) { handlePersonClick(position) }
     }
 
     private fun handlePersonClick(position: Int) {

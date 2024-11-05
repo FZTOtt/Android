@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -18,7 +19,35 @@ class JokeDetailsActivity : AppCompatActivity(), JokeDetailsView {
     private lateinit var binding: ActivityJokeDetailsBinding
     private lateinit var presenter: JokeDetailsPresenter
 
-    private var jokePosition: Int = -1
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityJokeDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        presenter = JokeDetailsPresenter(this)
+        handleExtra()
+        binding.backButton.setOnClickListener {
+            finish() //switch to OnBackPressedDispatcher later
+        }
+    }
+
+    private fun handleExtra() {
+        val jokePosition: Int = intent.getIntExtra(JOKE_POSITION_EXTRA, -1)
+        presenter.loadJokeDetails(jokePosition)
+    }
+
+    override fun showJokeInfo(joke: Joke) {
+        with(binding) {
+            jokeCategory.text = joke.category
+            jokeQuestion.text = joke.question
+            jokeAnswer.text = joke.answer
+        }
+    }
+
+    override fun showErrorAndCloseScreen(errorMessage: String) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+        finish()
+    }
 
     companion object {
 
@@ -29,35 +58,5 @@ class JokeDetailsActivity : AppCompatActivity(), JokeDetailsView {
                 putExtra(JOKE_POSITION_EXTRA, jokePosition)
             }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityJokeDetailsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        presenter = JokeDetailsPresenter(this)
-        handleExtra()
-        binding.backButton.setOnClickListener {
-            finish() //кстати интересно насколько это правильно
-        }
-    }
-
-    private fun handleExtra() {
-        jokePosition = intent.getIntExtra(JOKE_POSITION_EXTRA, -1)
-        presenter.loadJokeDetails(jokePosition)
-    }
-
-    override fun showJokeInfo(joke: Joke) {
-        with(binding) {
-            jokeCategory.text = "${joke.category}"
-            jokeQuestion.text = "${joke.question}"
-            jokeAnswer.text = "${joke.answer}"
-        }
-    }
-
-    override fun showErrorAndCloseScreen(errorMessage: String) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
-        finish()
     }
 }

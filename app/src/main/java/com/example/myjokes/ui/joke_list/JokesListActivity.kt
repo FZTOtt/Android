@@ -6,27 +6,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myjokes.data.Joke
-import com.example.myjokes.data.JokeGenerator
 import com.example.myjokes.databinding.ActivityJokesListBinding
 import com.example.myjokes.ui.joke_details.JokeDetailsActivity
 import com.example.myjokes.ui.joke_list.recycler.adapter.JokeAdapter
-import com.example.myjokes.ui.joke_list.recycler.adapter.JokeListAdapter
-import com.example.myjokes.ui.joke_list.recycler.util.JokeItemCallback
 
 class JokesListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityJokesListBinding
     private lateinit var viewModel: JokeListViewModel
-    val generator = JokeGenerator
 
     private val adapter = JokeAdapter {
         startActivity(JokeDetailsActivity.getInstance(this, it))
     }
-
-//    private val adapter2 = JokeListAdapter (
-//        JokeItemCallback(),
-//        startActivity(JokeDetailsActivity.getInstance(this, it))
-//    ) - я если честно не понял почему мне пишет ошибку, что startActivity возвращает Unit, вместо (Int) -> Unit, а с JokeAdapter такого нет
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +25,8 @@ class JokesListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         createRecyclerViewList()
-        generator.generateJokeData()
-        savedInstanceState?.let { setupData(generator.data) } // признаться честно: не понял зачем, и без этого при повороте экрана всё работает, экран повертел, всё то же
-        setupData(generator.data)
-
         initViewModel()
+        viewModel.generateJokes()
     }
 
     private fun initViewModel() {
@@ -56,9 +44,5 @@ class JokesListActivity : AppCompatActivity() {
     private fun createRecyclerViewList() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-    }
-
-    private fun setupData(newData: List<Joke>) {
-        adapter.setNewData(newData)
     }
 }

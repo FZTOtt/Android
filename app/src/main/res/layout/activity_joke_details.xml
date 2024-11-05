@@ -5,13 +5,22 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context=".ui.joke_details.JokeDetailsActivity">
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Назад"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/jokeCategory"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
         android:textColor="@color/user_black"
         android:textSize="@dimen/header1"
         android:textStyle="bold"
@@ -24,7 +33,7 @@
         android:id="@+id/jokeQuestion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:textColor="@color/user_black"
         android:textStyle="italic"
         android:textSize="@dimen/header2"
@@ -38,7 +47,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Ответ"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:textColor="@color/user_black"
         android:textStyle="italic"
@@ -47,12 +55,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/jokeQuestion" />
 
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="Назад"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
