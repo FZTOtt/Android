@@ -14,11 +14,19 @@ class JokeListViewModel: ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
+    private val _currentJokeIndex = MutableLiveData<Int>()
+    val currentJokeIndex: LiveData<Int>
+        get() = _currentJokeIndex
+
     fun generateJokes() {
         _jokes.value = JokeGenerator.generateJokeData()
     }
 
     fun showGeneratedData() {
         _jokes.value = JokeGenerator.data
+    }
+
+    fun setCurrentJokeIndex (index: Int) {
+        _currentJokeIndex.value = index
     }
 }

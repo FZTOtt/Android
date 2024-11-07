@@ -5,8 +5,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myjokes.R
 import com.example.myjokes.data.Joke
 import com.example.myjokes.databinding.ActivityJokesListBinding
+import com.example.myjokes.ui.fragments.BaseFragment
 import com.example.myjokes.ui.joke_details.JokeDetailsActivity
 import com.example.myjokes.ui.joke_list.recycler.adapter.JokeAdapter
 
@@ -26,7 +28,24 @@ class JokesListActivity : AppCompatActivity() {
 
         createRecyclerViewList()
         initViewModel()
-        viewModel.generateJokes()
+//        viewModel.generateJokes()
+        if (savedInstanceState == null) {
+            onFragment()
+        }
+    }
+
+    private fun onFragment() {
+
+        val fragment = BaseFragment.newInstance(1)
+
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.fragment_container_view, fragment)
+            .commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     private fun initViewModel() {

@@ -7,6 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.joke_list.JokesListActivity">
 
+    <TextView
+        android:id="@+id/exampleTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
@@ -17,10 +25,5 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="7"
         tools:listitem="@layout/joke_item" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

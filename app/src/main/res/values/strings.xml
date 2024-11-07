@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">My jokes</string>
+    <string name="screen_num">Screen %1$s</string>
 </resources>
