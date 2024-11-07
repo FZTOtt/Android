@@ -3,7 +3,6 @@ package com.example.myjokes.ui.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.replace
 import com.example.myjokes.R
 import com.example.myjokes.databinding.BaseFragmentBinding
 import java.util.Random
