@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.myjokes.R
 import com.example.myjokes.databinding.JokeDetailsFragmentBinding
 import com.example.myjokes.ui.joke_list.JokeListViewModel
 
-class JokeDetailsFragment: Fragment(R.layout.joke_details_fragment) {
+class JokeDetailsFragment: Fragment() {
     private val viewModel: JokeListViewModel by activityViewModels()
     private lateinit var binding: JokeDetailsFragmentBinding
 
@@ -25,13 +24,14 @@ class JokeDetailsFragment: Fragment(R.layout.joke_details_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.currentJokeIndex.observe(viewLifecycleOwner) { index ->
-            viewModel.jokes.value?.get(index)?.let { joke ->
-                binding.jokeCategory.text = joke.category
-                binding.jokeQuestion.text = joke.question
-                binding.jokeAnswer.text = joke.answer
+        viewModel.currentJoke.observe(viewLifecycleOwner) { joke ->
+            joke?.let {
+                binding.jokeCategory.text = it.category
+                binding.jokeQuestion.text = it.question
+                binding.jokeAnswer.text = it.answer
             }
         }
+
         binding.backButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
