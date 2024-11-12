@@ -39,4 +39,12 @@ class MainActivity: AppCompatActivity() {
             .commit()
     }
 
+    fun openAddJokeFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container_view, AddJokeFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
 }

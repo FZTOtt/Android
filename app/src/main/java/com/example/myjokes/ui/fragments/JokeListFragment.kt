@@ -12,7 +12,7 @@ import com.example.myjokes.databinding.JokeListFragmentBinding
 import com.example.myjokes.ui.joke_list.JokeListViewModel
 import com.example.myjokes.ui.joke_list.recycler.adapter.JokeAdapter
 
-class JokeListFragment: Fragment(R.layout.joke_list_fragment) {
+class JokeListFragment: Fragment() {
     private val viewModel: JokeListViewModel by activityViewModels()
     private lateinit var binding: JokeListFragmentBinding
     private lateinit var adapter: JokeAdapter
@@ -37,5 +37,10 @@ class JokeListFragment: Fragment(R.layout.joke_list_fragment) {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.jokes.observe(viewLifecycleOwner) {adapter.setNewData(it)}
+
+        binding.refreshButton.setOnClickListener { viewModel.getJokes() }
+        binding.addNew.setOnClickListener {
+            (activity as? MainActivity)?.openAddJokeFragment()
+        }
     }
 }
