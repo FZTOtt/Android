@@ -37,6 +37,7 @@ class AddJokeFragment: Fragment() {
             viewModel.addJoke(inputCategory.text.toString(),
                 inputQuestion.text.toString(),
                 inputAnswer.text.toString())
+            parentFragmentManager.popBackStack()
         }
 
     }

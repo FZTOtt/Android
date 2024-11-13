@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myjokes.R
 import com.example.myjokes.databinding.JokeListFragmentBinding
 import com.example.myjokes.ui.joke_list.JokeListViewModel
 import com.example.myjokes.ui.joke_list.recycler.adapter.JokeAdapter
@@ -36,7 +35,17 @@ class JokeListFragment: Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.jokes.observe(viewLifecycleOwner) {adapter.setNewData(it)}
+        viewModel.jokes.observe(viewLifecycleOwner) { jokes ->
+            adapter.setNewData(jokes)
+            binding.findedNothing.visibility = if (jokes.isEmpty()) View.VISIBLE else View.GONE
+            binding.recyclerView.visibility = if (jokes.isEmpty()) View.GONE else View.VISIBLE
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.recyclerView.visibility = if (isLoading) View.GONE else View.VISIBLE
+            binding.findedNothing.visibility = if (isLoading) View.GONE else binding.findedNothing.visibility
+        }
 
         binding.refreshButton.setOnClickListener { viewModel.getJokes() }
         binding.addNew.setOnClickListener {

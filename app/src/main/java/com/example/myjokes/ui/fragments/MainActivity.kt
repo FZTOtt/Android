@@ -18,7 +18,7 @@ class MainActivity: AppCompatActivity() {
 
         if (savedInstanceState == null) {
             openJokeListFragment()
-            viewModel.generateJokes()
+//            viewModel.generateJokes()
         }
     }
 
