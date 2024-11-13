@@ -17,7 +17,7 @@ class AddJokeFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = AddJokeFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
