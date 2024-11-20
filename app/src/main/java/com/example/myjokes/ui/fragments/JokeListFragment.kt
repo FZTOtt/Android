@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myjokes.data.Joke
 import com.example.myjokes.databinding.JokeListFragmentBinding
 import com.example.myjokes.ui.joke_list.JokeListViewModel
 import com.example.myjokes.ui.joke_list.recycler.adapter.JokeAdapter
@@ -35,21 +37,25 @@ class JokeListFragment: Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.jokes.observe(viewLifecycleOwner) { jokes ->
-            adapter.setNewData(jokes)
-            binding.findedNothing.visibility = if (jokes.isEmpty()) View.VISIBLE else View.GONE
-            binding.recyclerView.visibility = if (jokes.isEmpty()) View.GONE else View.VISIBLE
-        }
+        viewModel.jokes.observe(viewLifecycleOwner) { jokes -> updateJokes(jokes) }
 
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.recyclerView.visibility = if (isLoading) View.GONE else View.VISIBLE
-            binding.findedNothing.visibility = if (isLoading) View.GONE else binding.findedNothing.visibility
-        }
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading -> handleVisibility(isLoading) }
 
         binding.refreshButton.setOnClickListener { viewModel.getJokes() }
         binding.addNew.setOnClickListener {
             (activity as? MainActivity)?.openAddJokeFragment()
         }
+    }
+
+    private fun updateJokes(jokes: List<Joke>){
+        adapter.setNewData(jokes)
+        binding.findedNothing.isVisible = jokes.isEmpty()
+        binding.recyclerView.isVisible = jokes.isEmpty()
+    }
+
+    private fun handleVisibility (isLoading: Boolean) {
+        binding.progressBar.isVisible = isLoading
+        binding.recyclerView.isVisible = !isLoading
+        binding.findedNothing.isVisible = !isLoading && binding.findedNothing.isVisible
     }
 }

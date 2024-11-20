@@ -41,7 +41,7 @@ class JokeListViewModel: ViewModel() {
     }
 
     fun addJoke(category: String, question: String, answer: String) {
-        val lastIndex = _jokes?.value?.size ?: -1
+        val lastIndex = _jokes.value?.size ?: -1
         val index = lastIndex + 1
         val joke = Joke(index, category, question, answer)
         print("Шутка ${category}, ${question}, ${answer}")
