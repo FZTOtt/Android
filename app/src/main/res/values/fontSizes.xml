@@ -3,4 +3,5 @@
     <dimen name="header1">30dp</dimen>
     <dimen name="header2">20dp</dimen>
     <dimen name="text">15dp</dimen>
+    <dimen name="inputSize">15dp</dimen>
 </resources>

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">My jokes</string>
     <string name="screen_num">Screen %1$s</string>
+    <string name="add_joke">Добавление шутки</string>
 </resources>

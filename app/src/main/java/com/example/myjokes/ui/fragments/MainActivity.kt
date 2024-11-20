@@ -18,7 +18,7 @@ class MainActivity: AppCompatActivity() {
 
         if (savedInstanceState == null) {
             openJokeListFragment()
-            viewModel.generateJokes()
+//            viewModel.generateJokes()
         }
     }
 
@@ -35,6 +35,14 @@ class MainActivity: AppCompatActivity() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container_view, JokeDetailsFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    fun openAddJokeFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container_view, AddJokeFragment())
             .addToBackStack(null)
             .commit()
     }
