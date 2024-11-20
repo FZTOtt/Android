@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myjokes.data.Joke
 import com.example.myjokes.databinding.JokeListFragmentBinding
 import com.example.myjokes.ui.joke_list.JokeListViewModel
@@ -45,6 +46,23 @@ class JokeListFragment: Fragment() {
         binding.addNew.setOnClickListener {
             (activity as? MainActivity)?.openAddJokeFragment()
         }
+
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    val visibleItemCount = recyclerView.layoutManager?.childCount ?: 0
+                    val totalItemCount = recyclerView.layoutManager?.itemCount ?: 0
+                    val pastVisibleItems = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+                    if (visibleItemCount + pastVisibleItems >= totalItemCount) {
+                        viewModel.getJokes(false)
+                    }
+                }
+            }
+        })
+
+        viewModel.generateJokes()
     }
 
     private fun updateJokes(jokes: List<Joke>){
