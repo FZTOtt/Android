@@ -69,8 +69,8 @@ class JokeListViewModel: ViewModel() {
         }
     }
 
-    fun addJoke(category: String, question: String, answer: String) {
-        val joke = Joke(customJokeIdCounter++, category, question, answer)
+    fun addJoke(category: String, question: String, answer: String, own: Boolean = false) {
+        val joke = Joke(customJokeIdCounter++, category, question, answer, own)
         customJokes.add(joke)
         updateJokesList()
     }

@@ -12,5 +12,6 @@ data class Joke (
     @SerialName("setup")
     val question: String?,
     @SerialName("delivery")
-    val answer: String?
+    val answer: String?,
+    val own: Boolean = false
 )
