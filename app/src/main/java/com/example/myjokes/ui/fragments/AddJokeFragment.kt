@@ -36,7 +36,8 @@ class AddJokeFragment: Fragment() {
         binding.addJokeButton.setOnClickListener {
             viewModel.addJoke(inputCategory.text.toString(),
                 inputQuestion.text.toString(),
-                inputAnswer.text.toString())
+                inputAnswer.text.toString(),
+                true)
             parentFragmentManager.popBackStack()
         }
 

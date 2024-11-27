@@ -10,6 +10,7 @@ class JokeViewHolder(private val binding: JokeItemBinding): RecyclerView.ViewHol
         binding.category.text = joke.category
         binding.question.text = joke.question
         binding.answer.text = joke.answer
+        binding.own.text = if (joke.own) "Собственная" else "Загруженная"
 
         binding.root.setOnClickListener {
             onClick(adapterPosition)
