@@ -4,15 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle.State.*
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myjokes.data.Joke
 import com.example.myjokes.databinding.JokeListFragmentBinding
 import com.example.myjokes.ui.joke_list.JokeListViewModel
 import com.example.myjokes.ui.joke_list.recycler.adapter.JokeAdapter
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class JokeListFragment: Fragment() {
     private val viewModel: JokeListViewModel by activityViewModels()
@@ -38,11 +44,21 @@ class JokeListFragment: Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.jokes.observe(viewLifecycleOwner) { jokes -> updateJokes(jokes) }
+        lifecycleScope.launch {
+            repeatOnLifecycle(STARTED) {
+                viewModel.jokesFlow.collectLatest { jokes ->
+                    println("collectLatest")
+                    println(jokes)
+                    updateJokes(jokes)
+                }
+            }
+        }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading -> handleVisibility(isLoading) }
 
-        binding.refreshButton.setOnClickListener { viewModel.getJokes() }
+        viewModel.error.observe(viewLifecycleOwner) { error -> handleError(error) }
+
+        binding.refreshButton.setOnClickListener { viewModel.loadAllJokes() }
         binding.addNew.setOnClickListener {
             (activity as? MainActivity)?.openAddJokeFragment()
         }
@@ -62,13 +78,24 @@ class JokeListFragment: Fragment() {
             }
         })
 
-        viewModel.generateJokes()
+        viewModel.loadAllJokes()
+    }
+
+    private fun handleError(error: String) {
+        if (error == "connectionError")
+            Toast.makeText(
+                requireContext(),
+                "Интернет соединение не установлено",
+                Toast.LENGTH_SHORT
+            ).show()
     }
 
     private fun updateJokes(jokes: List<Joke>){
+        println("to UI")
+        println(jokes)
         adapter.setNewData(jokes)
         binding.findedNothing.isVisible = jokes.isEmpty()
-        binding.recyclerView.isVisible = jokes.isEmpty()
+        binding.recyclerView.isVisible = jokes.isNotEmpty()
     }
 
     private fun handleVisibility (isLoading: Boolean) {
