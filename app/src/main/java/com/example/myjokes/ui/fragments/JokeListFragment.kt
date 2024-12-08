@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myjokes.data.ErrorType
 import com.example.myjokes.data.Joke
 import com.example.myjokes.databinding.JokeListFragmentBinding
 import com.example.myjokes.ui.joke_list.JokeListViewModel
@@ -29,7 +30,7 @@ class JokeListFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = JokeListFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -58,7 +59,9 @@ class JokeListFragment: Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner) { error -> handleError(error) }
 
-        binding.refreshButton.setOnClickListener { viewModel.loadAllJokes() }
+        binding.refreshButton.setOnClickListener {
+            viewModel.loadAllJokes()
+        }
         binding.addNew.setOnClickListener {
             (activity as? MainActivity)?.openAddJokeFragment()
         }
@@ -81,13 +84,20 @@ class JokeListFragment: Fragment() {
         viewModel.loadAllJokes()
     }
 
-    private fun handleError(error: String) {
-        if (error == "connectionError")
-            Toast.makeText(
-                requireContext(),
-                "Интернет соединение не установлено",
-                Toast.LENGTH_SHORT
-            ).show()
+    private fun handleError(error: ErrorType) {
+        when (error) {
+            ErrorType.NONE -> {
+
+            }
+
+            ErrorType.CONNECTION_ERROR -> {
+                Toast.makeText(
+                    requireContext(),
+                    "Интернет соединение не установлено",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun updateJokes(jokes: List<Joke>){

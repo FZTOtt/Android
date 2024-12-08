@@ -1,12 +1,11 @@
 package com.example.myjokes.ui.joke_list
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myjokes.data.ErrorType
 import com.example.myjokes.data.Joke
-import com.example.myjokes.data.JokeGenerator
 import com.example.myjokes.data.JokeRepository
 import com.example.myjokes.data.RetrofitInstance
 import com.example.myjokes.data.db.AppDatabase
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class JokeListViewModel: ViewModel() {
@@ -27,8 +25,8 @@ class JokeListViewModel: ViewModel() {
     private val _jokes = MutableLiveData<List<Joke>>()
     val jokes: LiveData<List<Joke>> = _jokes
 
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
+    private val _error = MutableLiveData<ErrorType>(ErrorType.NONE)
+    val error: LiveData<ErrorType> = _error
 
     private val _currentJokeIndex = MutableLiveData<Int>()
 
@@ -38,14 +36,7 @@ class JokeListViewModel: ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private var customJokeIdCounter = 0
-//    private val customJokes = mutableListOf<Joke>()
-//    private val loadedJokes = mutableListOf<Joke>()
-
     private var isLoadingMore = false
-
-    private val _isCached = MutableLiveData<Boolean>()
-    val isCached: LiveData<Boolean> = _isCached
 
     private val repository: JokeRepository by lazy {
         JokeRepository(
@@ -55,6 +46,11 @@ class JokeListViewModel: ViewModel() {
 
     fun loadAllJokes() {
         println("load all jokes")
+
+        refreshJokes()
+        println(_jokes.value)
+        getJokes()
+        println(_jokes.value)
         viewModelScope.launch {
             _isLoading.value = true
             combine(repository.getAllUserJokes(), repository.getAllCachedJokes()) {
@@ -71,7 +67,7 @@ class JokeListViewModel: ViewModel() {
                         own = true
                     )
                 })
-                if (_error.value == "connectionError") {
+                if (_error.value == ErrorType.CONNECTION_ERROR) {
                     jokes.addAll(cachedJokes.map {
                         Joke(
                             id = it.id,
@@ -81,12 +77,26 @@ class JokeListViewModel: ViewModel() {
                             own = false
                         )
                     })
+                } else {
+                    println("из сети")
+                    println(_jokes.value)
+                    _jokes.value?.let {
+                        jokes.addAll(it.map {
+                            Joke(
+                                id = it.id,
+                                category = it.category,
+                                question = it.question,
+                                answer = it.answer,
+                                own = true
+                            )
+                        })
+                    }
                 }
-
                 jokes
             }.collect { combinedJokes ->
                 _jokesFlow.value = combinedJokes
-//                println(_jokesFlow.value)
+                println("после добавления шуток")
+                println(_jokesFlow.value)
                 _isLoading.value = false
             }
         }
@@ -94,11 +104,11 @@ class JokeListViewModel: ViewModel() {
         println(_jokesFlow.value)
     }
 
-    fun refreshJokes() {
+    private fun refreshJokes() {
         viewModelScope.launch {
             repository.clearOldCachedJokes()
-            repository.refreshCachedJokes()
-            loadAllJokes()
+//            repository.refreshCachedJokes()
+//            loadAllJokes()
         }
     }
 
@@ -130,24 +140,28 @@ class JokeListViewModel: ViewModel() {
                             timestamp = System.currentTimeMillis()
                         )
                     })
-                    if (_error.value == "connectionError") {
-                        _error.value = ""
+                    if (_error.value == ErrorType.CONNECTION_ERROR) {
+                        _error.value = ErrorType.NONE
                     }
-                } else {
-                    println("запрос не удался")
-                    _error.value = "connectionError"
-                    loadJokesFromCache()
                 }
             } catch (e: Exception) {
                 println(e)
+                println("запрос не удался")
+                if (_error.value != ErrorType.CONNECTION_ERROR) {
+                    loadJokesFromCache()
+                    _error.value = ErrorType.CONNECTION_ERROR
+                }
+
             } finally {
                 isLoadingMore = false
                 _isLoading.value = false
             }
-            _jokesFlow.value += loadedJokes
+            _jokes.value = _jokes.value?.let { currentJokes ->
+                currentJokes + loadedJokes
+            } ?: loadedJokes
         }
         println("final")
-        println(_jokesFlow.value)
+        println(_jokes.value)
     }
 
     fun addJoke(category: String, question: String, answer: String) {
@@ -164,9 +178,9 @@ class JokeListViewModel: ViewModel() {
     }
 
     private fun updateCurrentJoke() {
-        val jokesList = _jokes.value
+        val jokesList = _jokesFlow.value
         val index = _currentJokeIndex.value ?: 0
-        if (jokesList != null && index in jokesList.indices) {
+        if (index in jokesList.indices) {
             _currentJoke.value = jokesList[index]
         } else {
             _currentJoke.value = Joke(-1, "error", "error", "error")
