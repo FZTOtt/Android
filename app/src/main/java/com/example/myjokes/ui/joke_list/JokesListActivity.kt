@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myjokes.R
-import com.example.myjokes.data.Joke
 import com.example.myjokes.databinding.ActivityJokesListBinding
 import com.example.myjokes.ui.fragments.BaseFragment
 import com.example.myjokes.ui.joke_details.JokeDetailsActivity
@@ -53,7 +52,7 @@ class JokesListActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[JokeListViewModel::class.java]
 
         viewModel.jokes.observe(this) { adapter.setNewData(it) }
-        viewModel.error.observe(this) { showError(it) }
+        viewModel.error.observe(this) { showError(it.toString()) }
     }
 
     private fun showError(it: String?) {
