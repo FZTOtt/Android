@@ -71,7 +71,7 @@ class JokeListViewModel: ViewModel() {
                     jokes.addAll(cachedJokes.map {
                         Joke(
                             id = it.id,
-                            category = it.category,
+                            category = it.category + " (Cached)",
                             question = it.question,
                             answer = it.answer,
                             own = false
@@ -192,7 +192,7 @@ class JokeListViewModel: ViewModel() {
         _jokesFlow.value += cachedJokes.map { cachedJoke ->
             Joke(
                 id = cachedJoke.id,
-                category = cachedJoke.category,
+                category = cachedJoke.category + " (Cached)",
                 question = cachedJoke.question,
                 answer = cachedJoke.answer
             )
