@@ -4,14 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.OnBackPressedDispatcher
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.myjokes.R
-import com.example.myjokes.data.Joke
-import com.example.myjokes.data.JokeGenerator
+import com.example.myjokes.domain.entity.Joke
 import com.example.myjokes.databinding.ActivityJokeDetailsBinding
 
 class JokeDetailsActivity : AppCompatActivity(), JokeDetailsView {
