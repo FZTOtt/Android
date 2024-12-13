@@ -1,5 +1,7 @@
 package com.example.myjokes.data
 
+import com.example.myjokes.domain.entity.Joke
+
 object JokeGenerator {
 
     val data = mutableListOf<Joke>()

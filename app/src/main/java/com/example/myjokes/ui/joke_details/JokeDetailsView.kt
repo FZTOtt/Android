@@ -1,6 +1,6 @@
 package com.example.myjokes.ui.joke_details
 
-import com.example.myjokes.data.Joke
+import com.example.myjokes.domain.entity.Joke
 
 interface JokeDetailsView {
 
